@@ -1,5 +1,4 @@
 const { GoogleGenAI } = require("@google/genai");
-const Query = require("../models/Query");
 
 const genAI = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY,
@@ -32,7 +31,7 @@ Return ONLY valid JSON:
       contents: prompt,
     });
 
-    // ✅ UNIVERSAL TEXT EXTRACTION
+    // ✅ Extract text safely
     let text = "";
 
     if (typeof result.text === "function") {
@@ -47,7 +46,6 @@ Return ONLY valid JSON:
         .map(part => part.text || "")
         .join("");
     } else {
-      console.error("❌ Unknown Gemini response:", result);
       throw new Error("Unable to extract text from Gemini response");
     }
 
@@ -73,14 +71,8 @@ Return ONLY valid JSON:
       });
     }
 
-    const newEntry = new Query({
-      topic,
-      explanations: parsed,
-    });
-
-    await newEntry.save();
-
-    res.status(200).json(newEntry);
+    // ✅ RETURN DIRECT RESPONSE (NO DB)
+    res.status(200).json(parsed);
 
   } catch (error) {
     console.error("❌ Internal Server Error:", error);
