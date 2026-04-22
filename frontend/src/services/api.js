@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://luminaai-backend.onrender.com/api",
+  baseURL: import.meta.env.VITE_API_URL + "/api",
 });
 
-
-export const generateExplanation = (topic) => API.post('/generate', { topic });
+export const generateExplanation = (topic) =>
+  API.post("/generate", { topic });
