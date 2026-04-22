@@ -8,7 +8,15 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://lumina-ai-bay.vercel.app"
+    ],
+    credentials: true,
+  })
+);
 
 // Database Connection
 mongoose.connect(process.env.MONGO_URI)
